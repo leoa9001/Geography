@@ -3,10 +3,10 @@ import java.util.Arrays;
 
 
 public class Geograph {
-	public static final char baseChar = 'A';
+	public static final char baseState = 0;
 	
 	private int[][]graph;
-	private int gameState = baseChar;
+	private int gameState = 0;
 	private int playerTurn = 0;
 	
 	
@@ -21,14 +21,33 @@ public class Geograph {
 			char c1 = s.charAt(0), c2 = s.charAt(s.length()-1);
 			graph[(int)c1 - (int)'A'][(int)c2 - (int)'A']++;
 		}
-//		for(int i=0; i < 26; i++)System.out.println(Arrays.toString(graph[i]));
 	}
 	
 	
-	//Starting the doesp0win?
-	
+	//On current gameboard: can p0 force a win?
 	public boolean doesP0Win(){
+		int p = playerTurn, gs = gameState;//recursive stack storage
 		
+		//base case is when outdegree==0 which is had if all graph[gs][j]==0 and we get the return is whichever current player is on loses: i.e. p==1.
+		for(int j = 0;j < 26;j++){
+			if(graph[gs][j]==0)continue;//nothing to traverse
+			//traverse edge gs -> j
+			playerTurn = (playerTurn + 1) %2;
+			gameState = j;
+			graph[gs][j]--;
+			//recurse
+			boolean l = doesP0Win();
+			//detraverse
+			gameState = gs;
+			playerTurn = p;
+			graph[gs][j]++;
+			//check if known win already
+			if(l&&p==0)return true;
+			if(!l&&p==1)return false;
+		}
+		
+		
+		return p==1;
 	}
 	
 	
@@ -46,6 +65,7 @@ public class Geograph {
 		char c1 = s.charAt(0), c2 = s.charAt(s.length()-1);
 		if(graph[c1 - 'A'][c2 - 'A']==0)return false;
 		
+		//only part which alters game variables
 		graph[c1 - 'A'][c2 - 'A']--;
 		gameState = c2 - 'A';
 		playerTurn = (playerTurn+1)%2;
@@ -54,29 +74,29 @@ public class Geograph {
 		
 		marked = new boolean[26];
 		localize(gameState);
-		System.out.println(Arrays.toString(marked));
+//		System.out.println(Arrays.toString(marked));
 		
 		
-		//calculating statistics to see how long it may take and damn it'll take long ;0;
-		int sum = 0;
-		int prod = 1;
-		int m = 0;
-		for(int i = 0; i < 26; i++){
-			int sum2 = 0;
-			int sum3 = 0;
-			if(marked[i])for(int j = 0; j < 26; j++){//calculates a degree of a marked node
-				sum2 += graph[i][j];
-				if(graph[i][j]>=1)sum3++;
-			}
-			sum+=sum2;
-			if(sum2 >= 1)prod*= sum2;
-			m = Math.max(m, sum3);
-			System.out.println(sum3);
-		}
-		System.out.println(sum);
-		System.out.println(prod);
-		System.out.println(m);
-		System.out.println(Math.pow(m, 164));
+//		//calculating statistics to see how long it may take and damn it'll take long ;0;
+//		int sum = 0;
+//		int prod = 1;
+//		int m = 0;
+//		for(int i = 0; i < 26; i++){
+//			int sum2 = 0;
+//			int sum3 = 0;
+//			if(marked[i])for(int j = 0; j < 26; j++){//calculates a degree of a marked node
+//				sum2 += graph[i][j];
+//				if(graph[i][j]>=1)sum3++;
+//			}
+//			sum+=sum2;
+//			if(sum2 >= 1)prod*= sum2;
+//			m = Math.max(m, sum3);
+//			System.out.println(sum3);
+//		}
+//		System.out.println(sum);
+//		System.out.println(prod);
+//		System.out.println(m);
+//		System.out.println(Math.pow(m, 164));
 		return true;
 	}
 	
