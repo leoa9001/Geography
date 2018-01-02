@@ -22,6 +22,8 @@ public class Main {
 		System.out.println(Arrays.toString(countries2));
 		Geograph graph = new Geograph(countries2);
 		graph.localize("US");
+		System.out.println(graph.longestWalk());
+		
 		sc.close();
 	}
 
