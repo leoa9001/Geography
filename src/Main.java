@@ -10,7 +10,7 @@ public class Main {
 	
 	
 	public static void main(String[]args) throws FileNotFoundException {
-		Scanner sc = new Scanner(new File("testcountries.txt"));
+		Scanner sc = new Scanner(new File("countries.txt"));
 		List<String>countries = new ArrayList<String>();
 		while(sc.hasNextLine()){
 			countries.add(sc.nextLine().trim());
@@ -22,6 +22,7 @@ public class Main {
 		System.out.println(Arrays.toString(countries2));
 		Geograph graph = new Geograph(countries2);
 		graph.localize("AA");
+		System.out.println(graph.doesP0Win());
 		
 		
 		sc.close();

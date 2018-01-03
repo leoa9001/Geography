@@ -27,7 +27,7 @@ public class Geograph {
 	//On current gameboard: can p0 force a win?
 	public boolean doesP0Win(){
 		int p = playerTurn, gs = gameState;//recursive stack storage
-		
+		System.out.println(gs);
 		//base case is when outdegree==0 which is had if all graph[gs][j]==0 and we get the return is whichever current player is on loses: i.e. p==1.
 		for(int j = 0;j < 26;j++){
 			if(graph[gs][j]==0)continue;//nothing to traverse
